@@ -1,0 +1,16 @@
+<navbar></navbar>
+
+<button class="btn btn-primary my-3" (click)="addProduct()">Add Product</button>
+<div class="container my-3">
+  <div class="row">
+    <div class="col-3">
+      <!-- Category List-->
+      <category-list></category-list>
+    </div>
+    <div class="col-9">
+      <!-- Product List -->
+      <!-- <product-list></product-list> -->
+      <router-outlet></router-outlet>
+    </div>
+  </div>
+</div>
