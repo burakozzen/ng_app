@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Product } from '../models/product';
 import { ProductRepository } from '../models/product.repository';
 import { ActivatedRoute } from '@angular/router';
+import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'product-list',
@@ -12,7 +13,7 @@ export class ProductListComponent implements OnInit {
   products: Product[];
   productRepository: ProductRepository;
   selectedProduct: Product | null;
-  constructor(private route: ActivatedRoute) {
+  constructor(private route: ActivatedRoute, private http: HttpClient) {
     this.productRepository = new ProductRepository();
     this.products = this.productRepository.getProducts();
   }
@@ -24,6 +25,11 @@ export class ProductListComponent implements OnInit {
           p['categoryId']
         );
       } else {
+        this.http.get("https://ng-shopapp-fa258-default-rtdb.firebaseio.com/products.json")
+          .subscribe(p => {
+            console.log(p)
+          })
+
         this.products = this.productRepository.getProducts();
       }
     });
