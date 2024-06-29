@@ -2,36 +2,29 @@ import { Component, OnInit } from '@angular/core';
 import { Product } from '../models/product';
 import { ProductRepository } from '../models/product.repository';
 import { ActivatedRoute } from '@angular/router';
-import { HttpClient } from '@angular/common/http';
+import { ProductService } from 'src/services/product.service';
 
 @Component({
   selector: 'product-list',
   templateUrl: './product-list.component.html',
   styleUrls: ['./product-list.component.css'],
+  providers: [ProductService]
 })
 export class ProductListComponent implements OnInit {
-  products: Product[];
+  products: Product[] = [];
   productRepository: ProductRepository;
   selectedProduct: Product | null;
-  constructor(private route: ActivatedRoute, private http: HttpClient) {
+
+  constructor(private route: ActivatedRoute, private productService: ProductService) {
     this.productRepository = new ProductRepository();
     this.products = this.productRepository.getProducts();
   }
 
   ngOnInit(): void {
     this.route.params.subscribe((p) => {
-      if (p['categoryId']) {
-        this.products = this.productRepository.getProductsByCategoryId(
-          p['categoryId']
-        );
-      } else {
-        this.http.get("https://ng-shopapp-fa258-default-rtdb.firebaseio.com/products.json")
-          .subscribe(p => {
-            console.log(p)
-          })
-
-        this.products = this.productRepository.getProducts();
-      }
+      this.productService.getProducts(p['categoryId']).subscribe(data => {
+        this.products = data
+      })
     });
   }
 }
