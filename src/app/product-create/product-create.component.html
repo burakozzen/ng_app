@@ -1,12 +1,45 @@
 <h3>Product Create</h3>
-<form>
+<form (ngSubmit)="getModelParameters()" #product_form="ngForm">
+  <div class="alert alert-danger" *ngIf="error_msg">{{ error_msg }}</div>
   <div class="mb-3">
     <label for="name" class="form-label">Name</label>
-    <input type="text" id="name" name="name" class="form-control" #name />
+    <input
+      type="text"
+      id="name"
+      name="name"
+      class="form-control"
+      #name
+      #model_name="ngModel"
+      [(ngModel)]="product_model.name"
+      required
+    />
+    <div
+      class="text-danger mt-1"
+      *ngIf="model_name.invalid && model_name.touched"
+    >
+      Name is not valid !
+    </div>
   </div>
   <div class="mb-3">
     <label for="price" class="form-label">price</label>
-    <input type="text" id="price" name="price" class="form-control" #price />
+    <input
+      type="number"
+      id="price"
+      name="price"
+      class="form-control"
+      #price
+      [(ngModel)]="product_model.price"
+      required
+      min="0"
+      max="1000000"
+      #model_price="ngModel"
+    />
+    <div
+      class="text-danger mt-1"
+      *ngIf="model_price.invalid && model_price.touched"
+    >
+      Price is not valid !
+    </div>
   </div>
   <div class="mb-3">
     <label for="imageUrl" class="form-label">imageUrl</label>
@@ -15,7 +48,8 @@
       id="imageUrl"
       name="imageUrl"
       class="form-control"
-      #imgUrl
+      #imageUrl
+      [(ngModel)]="product_model.imageUrl"
     />
   </div>
   <div class="mb-3">
@@ -26,7 +60,9 @@
       name="description"
       class="form-control"
       #description
+      [(ngModel)]="product_model.description"
     ></textarea>
+
   </div>
   <div class="form-check mb-3">
     <input
@@ -36,12 +72,19 @@
       name="isActive"
       id="isActive"
       #isActive
+      [(ngModel)]="product_model.isActive"
     />
     <label class="form-check-label" for="flexCheckDefault"> is Active </label>
   </div>
   <div class="mb-3">
     <label for="categoryId" class="form-label">Cateogory</label>
-    <select name="categoryId" id="categoryId" class="form-select" #categoryId>
+    <select
+      name="categoryId"
+      id="categoryId"
+      class="form-select"
+      #categoryId
+      [(ngModel)]="product_model.categoryId"
+    >
       <option value="0">Category</option>
       <option *ngFor="let category of categories" value="{{ category.id }}">
         {{ category.name }}
@@ -52,9 +95,16 @@
     type="button"
     class="btn btn-primary"
     (click)="
-      saveProduct(name, price, imgUrl, description, isActive, categoryId)
+      saveProduct(name, price, imageUrl, description, isActive, categoryId)
     "
   >
     Save Product
+  </button>
+  <button
+    type="submit"
+    class="btn btn-primary"
+    [disabled]="product_form.invalid"
+  >
+    Model Product
   </button>
 </form>

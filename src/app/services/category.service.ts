@@ -1,6 +1,6 @@
 import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
-import { Observable, map, tap } from "rxjs";
+import { Observable, delay, map, tap } from "rxjs";
 import { Category } from "../models/category";
 
 @Injectable()
@@ -18,16 +18,19 @@ export class CategoryService {
           categories.push({ ...datas[key], id: key });
         }
         return categories;
-      }),
-      tap((data) => console.log(data))
+      })
     );
   }
 
   createCategory(category: Category): Observable<Category> {
-    return this.http.post<Category>(this.category_json_url, category);
+    return this.http
+      .post<Category>(this.category_json_url, category)
+      .pipe(delay(1000));
   }
 
   getCategoryById(id: string): Observable<Category> {
-    return this.http.get<Category>(this.base_url + `categories/${id}.json  `);
+    return this.http
+      .get<Category>(this.base_url + `categories/${id}.json  `)
+      .pipe(delay(1000));
   }
 }

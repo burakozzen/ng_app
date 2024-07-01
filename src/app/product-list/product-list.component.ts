@@ -12,6 +12,7 @@ import { ProductService } from "src/app/services/product.service";
 export class ProductListComponent implements OnInit {
   products: Product[] = [];
   selectedProduct: Product | null;
+  loading = false;
 
   constructor(
     private route: ActivatedRoute,
@@ -23,9 +24,11 @@ export class ProductListComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.loading = true;
     this.route.params.subscribe((p) => {
       this.productService.getProducts(p["categoryId"]).subscribe((data) => {
         this.products = data;
+        this.loading = false;
       });
     });
   }
